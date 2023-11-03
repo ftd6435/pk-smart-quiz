@@ -8,6 +8,13 @@ function Button({ type, children, onDispatch }) {
         >
           {children} &darr;
         </button>
+      ) : type === "hideResult" ? (
+        <button
+          className="btn btn-next"
+          onClick={() => onDispatch({ type: type })}
+        >
+          {children} &uarr;
+        </button>
       ) : type === "start" ? (
         <button
           className="btn btn-next"

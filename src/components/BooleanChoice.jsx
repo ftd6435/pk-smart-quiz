@@ -14,10 +14,12 @@ function BooleanChoice({
   score,
   seconds,
 }) {
+  // Retrieve the current question
   const currentQuestion = questions[index];
+
+  // Retrieve the minutes and seconds from useTimer function
   const { min, sec } = useTimer(seconds, onDispatch);
 
-  //   console.log(min, sec);
 
   return (
     <div className="booleanChoice">
@@ -32,11 +34,13 @@ function BooleanChoice({
         <>
           <div className="quizHeader">
             <h1>Question: {index + 1}</h1>
+
             <span className="timer">
               {min < 10 ? "0" : ""}
               {min}:{sec < 10 ? "0" : ""}
               {sec}
             </span>
+            
           </div>
           <h2>{currentQuestion.question}</h2>
           <Options

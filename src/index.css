@@ -54,6 +54,10 @@ ul {
   padding: 0;
 }
 
+/*
+--- Header Component styling starts ---
+*/
+
 .app {
   max-width: 900px;
   margin: 2rem auto;
@@ -70,7 +74,20 @@ ul {
 .header h1 {
   text-transform: uppercase;
   font-style: italic;
+  text-shadow: 2px -2px 2px rgba(78,52,46,1);
 }
+
+.header h1 span{
+  color: var(--secondary);
+}
+
+/*
+--- Header Component styling ends ---
+*/
+
+/*
+--- Button and Timer Component styling starts ---
+*/
 
 .btn,
 .timer {
@@ -124,8 +141,17 @@ ul {
   background: transparent;
 }
 
+/*
+--- Button and Timer Component styling ends ---
+*/
+
+
+/*
+--- MainContent Component styling starts ---
+*/
+
 main {
-  height: 75vh;
+  min-height: 75vh;
   display: flex;
   flex-direction: column;
 }
@@ -140,6 +166,14 @@ main .welcome {
   text-transform: capitalize;
   letter-spacing: 1px;
 }
+
+/*
+--- MainContent Component styling ends ---
+*/
+
+/*
+--- Setting quiz form styling starts ---
+*/
 
 form {
   display: flex;
@@ -162,13 +196,22 @@ form input {
   color: #444;
 }
 
+/*
+--- Setting quiz form styling ends ---
+*/
+
+/*
+--- Footer component styling starts ---
+*/
+
 .footer {
   text-align: center;
-  position: absolute;
+  /* position: absolute;
   bottom: 0;
-  left: 0;
-  z-index: 1;
+  left: 0; */
+  /* z-index: 1; */
   width: 100%;
+  margin-top: auto;
   padding: 1.5rem 2rem;
   border-top: 1px solid var(--primary);
 }
@@ -184,6 +227,14 @@ form input {
   font-size: 1.6rem;
 }
 
+/*
+--- Footer component styling ends ---
+*/
+
+/*
+--- Loader component styling starts ---
+*/
+
 .loaderContainer {
   height: 100%;
   display: flex;
@@ -192,25 +243,20 @@ form input {
 }
 
 .loader {
-  /* text-align: center; */
   font-size: 1.8rem;
   font-weight: 700;
   font-family: var(--headline-font);
   letter-spacing: 2;
   text-transform: uppercase;
-  /* width: 6rem;
-  height: 6rem;
-  border-radius: 50%;
-  background: conic-gradient(var(--primary) 10%, var(--color-light--2));
-  -webkit-mask: radial-gradient(farthest-side, var(--primary) calc(100% - 8px), var(--primary) 0);
-  animation: rotate 1.5s infinite linear; */
 }
 
-@keyframes rotate {
-  to {
-    transform: rotate(1turn);
-  }
-}
+/*
+--- Loader component styling ends ---
+*/
+
+/*
+--- Error component styling starts ---
+*/
 
 .error {
   text-align: center;
@@ -220,6 +266,14 @@ form input {
   background-color: #495057;
   border-radius: 100px;
 }
+
+/*
+--- Error component styling ends ---
+*/
+
+/*
+--- MultipleChoice, BooleanChoice, Options and ShowResult components styling starts ---
+*/
 
 .multipleChoice,
 .booleanChoice {
@@ -235,6 +289,7 @@ form input {
   width: 80%;
   margin: 2rem auto;
 }
+
 
 .options,
 .showResult {
@@ -290,6 +345,14 @@ form input {
   justify-content: end;
 }
 
+/*
+--- MultipleChoice, BooleanChoice, Options and ShowResult components styling ends ---
+*/
+
+/*
+--- Progress component and QuizHeader styling starts ---
+*/
+
 .quizHeader {
   display: flex;
   justify-content: space-between;
@@ -328,3 +391,7 @@ form input {
   background-color: var(--secondary);
   border-radius: 50px;
 }
+
+/*
+--- Progress component and QuizHeader styling ends ---
+*/

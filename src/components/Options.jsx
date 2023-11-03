@@ -1,4 +1,3 @@
-// import { useState } from "react";
 
 function Options({ answers, onDispatch, answer, correct }) {
   const hasAnswered = answer !== null;
