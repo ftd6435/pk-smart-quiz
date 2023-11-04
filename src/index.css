@@ -257,9 +257,13 @@ form input {
 .error {
   text-align: center;
   font-size: 1.6rem;
+}
+
+.error p{
   font-weight: 500;
   padding: 2rem;
-  background-color: #495057;
+  margin-bottom: 2rem;
+  background-color: var(--secondary);
   border-radius: 100px;
 }
 

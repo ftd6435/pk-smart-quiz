@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useReducer } from "react";
 
-import MultipleChoice from "./MultipleChoice";
+import Questions from "./Questions";
 import Header from "./Header";
 import MainContent from "./MainContent";
 import Footer from "./Footer";
@@ -11,20 +11,18 @@ import Error from "./Error";
 import Welcome from "./Welcome";
 import Form from "./Form";
 import QuizResult from "./QuizResult";
-import BooleanChoice from "./BooleanChoice";
+
+import he from 'he';
 
 const API_BASIC_URL = "https://opentdb.com/api.php";
 
 /** This function permits to return mininum second allowed for a user 
- ** to answer each question according to its difficulty and type */
+ ** to answer each question according to its difficulty */
 
-function setTimer(difficulty, type) {
-  if (difficulty === "easy" && type === "boolean") return 15;
-  if (difficulty === "medium" && type === "boolean") return 20;
-  if (difficulty === "hard" && type === "boolean") return 25;
-  if (difficulty === "easy" && type === "multiple") return 20;
-  if (difficulty === "medium" && type === "multiple") return 30;
-  if (difficulty === "hard" && type === "multiple") return 35;
+function setTimer(difficulty) {
+  if (difficulty === "easy") return 15;
+  if (difficulty === "medium") return 25;
+  if (difficulty === "hard") return 30;
 }
 
 // Initial quiz set
@@ -35,6 +33,7 @@ const initialQuiz = {
   difficulty: "",
   quizType: "",
   status: "start",
+  nextQuestion: null,
   index: 0,
   answer: null,
   correct: null,
@@ -79,8 +78,8 @@ function reducer(state, action) {
         category: "",
         limit: 10,
         difficulty: "",
-        quizType: "",
         status: "start",
+        nextQuestion: null,
         index: 0,
         answer: null,
         correct: null,
@@ -97,7 +96,6 @@ function reducer(state, action) {
         category: action.payload.category,
         limit: action.payload.limit,
         difficulty: action.payload.difficulty.toLowerCase(),
-        quizType: action.payload.quizType,
         status: "active",
       };
     case "error":
@@ -126,9 +124,9 @@ function reducer(state, action) {
           : question
       );
 
-      // Set timer according to the difficulty and type chosen SEE FUNC ABOVE 
+      // Set timer according to the difficulty chosen SEE FUNC ABOVE 
       const seconds =
-        setTimer(state.difficulty, state.quizType) * state.questions.length;
+        setTimer(state.difficulty) * state.questions.length;
 
       // Return state after fetching the questions from the API 
       return {
@@ -152,9 +150,9 @@ function reducer(state, action) {
       /** Add the question, its correct answer and the chosen answer to the array "takenQuizResult" 
        ** array created ABOVE */
       takenQuizResult[state.index] = {
-        question: state.questions[state.index].question,
-        correctAnswer: state.questions[state.index].correct_answer,
-        answer: action.payload,
+        question: he.decode(state.questions[state.index].question),
+        correctAnswer: he.decode(state.questions[state.index].correct_answer),
+        answer: he.decode(action.payload),
       };
 
       // Return state, grade the answer then set status to nextQuestion
@@ -162,7 +160,7 @@ function reducer(state, action) {
         ...state,
         answer: action.payload,
         score: mark ? state.score + 10 : state.score,
-        status: "nextQuestion",
+        nextQuestion: "nextQuestion",
       };
 
     // Next button action
@@ -173,14 +171,14 @@ function reducer(state, action) {
         index: state.index + 1,
         answer: null,
         correct: null,
-        status: "ready",
+        nextQuestion: null,
       };
 
       // Result button action
     case "result":
       /** After taking test and pressed on result button, set quizType and category to null 
        ** to avoid fetching new questions or displaying an unwanted component */
-      return { ...state, status: "quizResult", quizType: "", category: "" };
+      return { ...state, status: "quizResult", category: "" };
 
       // Timer actions
     case "tick":
@@ -194,7 +192,6 @@ function reducer(state, action) {
         ...state,
         secondsNecessary: state.secondsNecessary - 1,
         status: state.secondsNecessary === 0 ? "quizResult" : state.status,
-        quizType: state.secondsNecessary === 0 ? "" : state.quizType,
         category: state.secondsNecessary === 0 ? "" : state.category,
       };
 
@@ -216,8 +213,8 @@ function App() {
       category,
       limit,
       difficulty,
-      quizType,
       status,
+      nextQuestion,
       index,
       answer,
       correct,
@@ -242,12 +239,12 @@ function App() {
           setIsLoading(true);
 
           const res = await fetch(
-            `${API_BASIC_URL}?amount=${limit}&category=${category}&difficulty=${difficulty}&type=${quizType}`
+            `${API_BASIC_URL}?amount=${limit}&category=${category}&difficulty=${difficulty}`
           );
           if (!res.ok) return dispatch({ type: "error" });
           const data = await res.json();
 
-          if(data.length === 0) return dispatch({type: "error"});
+          if(data.results.length === 0) return dispatch({type: "error"});
 
           dispatch({ type: "dataReady", payload: data.results });
           // console.log(data.results);
@@ -260,7 +257,7 @@ function App() {
 
       getQuestions();
     },
-    [limit, category, difficulty, quizType]
+    [limit, category, difficulty]
   );
 
   // Get the number of questions if it is not empty
@@ -277,28 +274,15 @@ function App() {
           </>
         )}
         {status !== "start" && isLoading && <Loader />}
-        {status === "error" && <Error />}
-        {quizType === "multiple" && (
-          <MultipleChoice
+        {status === "error" && <Error onDispatch={dispatch} message="Something went wrong during fetching the data certainly. Kindly go back to the settings" />}
+        {status === "ready" && (
+          <Questions
             questions={questions}
             index={index}
             numberQuestions={numberQuestions}
             onDispatch={dispatch}
             answer={answer}
-            status={status}
-            correct={correct}
-            score={score}
-            seconds={secondsNecessary}
-          />
-        )}
-        {quizType === "boolean" && (
-          <BooleanChoice
-            questions={questions}
-            index={index}
-            numberQuestions={numberQuestions}
-            onDispatch={dispatch}
-            answer={answer}
-            status={status}
+            nextQuestion={nextQuestion}
             correct={correct}
             score={score}
             seconds={secondsNecessary}

@@ -1,8 +1,11 @@
-function Error({message}) {
+import Button from "./Button";
+
+function Error({message, onDispatch = null}) {
   return (
-    <p className="error">
-      <span>💥</span> {message}
-    </p>
+    <div className="error">
+      <p><span>💥</span> {message}</p>
+      <Button type="start" onDispatch={onDispatch}>Back to Settings</Button>
+    </div>
   );
 }
 

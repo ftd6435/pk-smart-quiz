@@ -8,7 +8,6 @@ function Form({ onDispatch }) {
   const [difficulty, setDifficulty] = useState("");
   const [category, setCategory] = useState("");
   const [categories, setCategories] = useState(null);
-  const [quizType, setQuizType] = useState("");
 
   useEffect(
     function () {
@@ -35,11 +34,11 @@ function Form({ onDispatch }) {
   function handleForm(e) {
     e.preventDefault();
 
-    if(category === "" || difficulty === "" || quizType === "") return;
+    if(category === "" || difficulty === "") return;
 
     onDispatch({
       type: "quizSet",
-      payload: { category, difficulty, limit, quizType },
+      payload: { category, difficulty, limit},
     });
   }
 
@@ -71,11 +70,11 @@ function Form({ onDispatch }) {
         ))}
       </select>
 
-      <select value={quizType} onChange={(e) => setQuizType(e.target.value)}>
+      {/* <select value={quizType} onChange={(e) => setQuizType(e.target.value)}>
         <option value="">Select Type</option>
         <option value="multiple">Multiple choice</option>
         <option value="boolean">True / False</option>
-      </select>
+      </select> */}
 
       <div>
         <button className="btn btn-submit">Start Quiz</button>

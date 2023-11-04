@@ -1,28 +1,26 @@
-import ProgressBar from "./ProgressBar";
-import Options from "./Options";
 import Button from "./Button";
+import Options from "./Options";
+import ProgressBar from "./ProgressBar";
 import useTimer from "./TimeCalculator";
 
-function BooleanChoice({
+import he from 'he';
+
+function Questions({
   questions,
   onDispatch,
   index,
   numberQuestions,
   answer,
-  status,
+  nextQuestion,
   correct,
   score,
   seconds,
 }) {
-  // Retrieve the current question
   const currentQuestion = questions[index];
-
-  // Retrieve the minutes and seconds from useTimer function
   const { min, sec } = useTimer(seconds, onDispatch);
 
-
   return (
-    <div className="booleanChoice">
+    <div className={`${currentQuestion.type === 'multiple' ? 'multipleChoice' : 'booleanChoice'}`}>
       <ProgressBar
         index={index}
         numberQuestions={numberQuestions}
@@ -34,15 +32,13 @@ function BooleanChoice({
         <>
           <div className="quizHeader">
             <h1>Question: {index + 1}</h1>
-
             <span className="timer">
               {min < 10 ? "0" : ""}
               {min}:{sec < 10 ? "0" : ""}
               {sec}
             </span>
-            
           </div>
-          <h2>{currentQuestion.question}</h2>
+          <h2>{he.decode(currentQuestion.question)}</h2>
           <Options
             answers={currentQuestion.answers}
             onDispatch={onDispatch}
@@ -51,7 +47,7 @@ function BooleanChoice({
           />
         </>
       )}
-      {status === "nextQuestion" && (
+      {nextQuestion && (
         <div className="btn-sec">
           {index < numberQuestions - 1 ? (
             <Button onDispatch={onDispatch} type="next">
@@ -68,4 +64,4 @@ function BooleanChoice({
   );
 }
 
-export default BooleanChoice;
+export default Questions;

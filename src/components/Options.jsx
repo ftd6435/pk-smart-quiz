@@ -1,3 +1,5 @@
+import he from 'he';
+
 
 function Options({ answers, onDispatch, answer, correct }) {
   const hasAnswered = answer !== null;
@@ -14,7 +16,7 @@ function Options({ answers, onDispatch, answer, correct }) {
             disabled={hasAnswered}
             onClick={() => onDispatch({ type: "newAnwer", payload: opt })}
           >
-            {i + 1} - {opt}
+            {i + 1} - {he.decode(opt)}
           </button>
         ))}
     </div>
