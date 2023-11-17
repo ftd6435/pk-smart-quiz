@@ -1,32 +1,31 @@
+import { useQuiz } from "../contexts/QuizContext";
 import Button from "./Button";
 import Options from "./Options";
 import ProgressBar from "./ProgressBar";
 import useTimer from "./TimeCalculator";
 
-import he from 'he';
+import he from "he";
 
-function Questions({
-  questions,
-  onDispatch,
-  index,
-  numberQuestions,
-  answer,
-  nextQuestion,
-  correct,
-  score,
-  seconds,
-}) {
+function Questions() {
+  const {
+    questions,
+    onDispatch,
+    index,
+    numberQuestions,
+    nextQuestion,
+    secondsNecessary,
+  } = useQuiz();
+
   const currentQuestion = questions[index];
-  const { min, sec } = useTimer(seconds, onDispatch);
+  const { min, sec } = useTimer(secondsNecessary, onDispatch);
 
   return (
-    <div className={`${currentQuestion.type === 'multiple' ? 'multipleChoice' : 'booleanChoice'}`}>
-      <ProgressBar
-        index={index}
-        numberQuestions={numberQuestions}
-        answer={answer}
-        score={score}
-      />
+    <div
+      className={`${
+        currentQuestion.type === "multiple" ? "multipleChoice" : "booleanChoice"
+      }`}
+    >
+      <ProgressBar />
 
       {currentQuestion && (
         <>
@@ -39,24 +38,15 @@ function Questions({
             </span>
           </div>
           <h2>{he.decode(currentQuestion.question)}</h2>
-          <Options
-            answers={currentQuestion.answers}
-            onDispatch={onDispatch}
-            answer={answer}
-            correct={correct}
-          />
+          <Options answers={currentQuestion.answers} />
         </>
       )}
       {nextQuestion && (
         <div className="btn-sec">
           {index < numberQuestions - 1 ? (
-            <Button onDispatch={onDispatch} type="next">
-              Next
-            </Button>
+            <Button type="next">Next</Button>
           ) : (
-            <Button onDispatch={onDispatch} type="result">
-              See Result
-            </Button>
+            <Button type="result">See Result</Button>
           )}
         </div>
       )}

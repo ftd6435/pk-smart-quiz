@@ -1,4 +1,8 @@
-function Button({ type, children, onDispatch }) {
+import { useQuiz } from "../contexts/QuizContext";
+
+function Button({ type, children }) {
+  const {onDispatch} = useQuiz();
+
   return (
     <>
       {type === "showResult" ? (

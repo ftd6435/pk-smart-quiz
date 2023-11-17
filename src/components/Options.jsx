@@ -1,7 +1,9 @@
 import he from 'he';
+import { useQuiz } from '../contexts/QuizContext';
 
 
-function Options({ answers, onDispatch, answer, correct }) {
+function Options({ answers }) {
+  const {answer, correct, onDispatch} = useQuiz();
   const hasAnswered = answer !== null;
 
   return (

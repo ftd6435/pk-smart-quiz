@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import Input from "./Input";
+import { useQuiz } from "../contexts/QuizContext";
 
 const difficulties = ["Easy", "Medium", "Hard"];
 
-function Form({ onDispatch }) {
+function Form() {
+  const  {onDispatch} = useQuiz();
+
   const [limit, setLimit] = useState(10);
   const [difficulty, setDifficulty] = useState("");
   const [category, setCategory] = useState("");
@@ -69,12 +72,6 @@ function Form({ onDispatch }) {
           </option>
         ))}
       </select>
-
-      {/* <select value={quizType} onChange={(e) => setQuizType(e.target.value)}>
-        <option value="">Select Type</option>
-        <option value="multiple">Multiple choice</option>
-        <option value="boolean">True / False</option>
-      </select> */}
 
       <div>
         <button className="btn btn-submit">Start Quiz</button>

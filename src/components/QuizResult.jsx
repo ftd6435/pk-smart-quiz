@@ -1,12 +1,9 @@
+import { useQuiz } from "../contexts/QuizContext";
 import Button from "./Button";
 
-function QuizResult({
-  score,
-  numberQuestions,
-  takenQuizResult,
-  onDispatch,
-  showResult,
-}) {
+function QuizResult() {
+
+  const {score, numberQuestions, takenQuizResult, result} = useQuiz();
   
   const possibleScore = 10 * numberQuestions;
   const percentage = (score / possibleScore) * 100;
@@ -18,15 +15,15 @@ function QuizResult({
       </h4>
 
       <div className="quizHeader">
-        <Button type={`${showResult === 'show' ? 'hideResult' : 'showResult'}`} onDispatch={onDispatch}>
-          {showResult === "show" ? "Hide Result" : "Show Result"}
+        <Button type={`${result === 'show' ? 'hideResult' : 'showResult'}`}>
+          {result === "show" ? "Hide Result" : "Show Result"}
         </Button>
-        <Button type="start" onDispatch={onDispatch}>
+        <Button type="start">
           Restart Quiz
         </Button>
       </div>
 
-      {showResult === "show" && (
+      {result === "show" && (
         <ul className="showResult">
           {takenQuizResult &&
             takenQuizResult.map((quiz, i) => (
